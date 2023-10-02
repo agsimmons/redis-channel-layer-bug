@@ -70,6 +70,24 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = "redis_channel_layer_bug.asgi.application"
+# NOTE: The bug does not occur with this configuration
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer",
+#     },
+# }
+
+# NOTE: The bug does not occur with this configuration
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.pubsub.RedisPubSubChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)],
+#         },
+#     },
+# }
+
+# NOTE: The bug occurs with this configuration
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -78,6 +96,8 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
