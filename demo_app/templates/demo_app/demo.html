@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Demo</title>
+
+    <style>
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div>
+        <h2>User Log</h2>
+        <textarea id="user-log" cols="100" rows="15" readonly></textarea>
+    </div>
+
+    <div>
+        <h2>Chat</h2>
+        <textarea id="chat" cols="100" rows="15" readonly></textarea>
+        <div>
+            <label for="chat-message-input">Message:</label>
+            <input id="chat-message-input" type="text">
+        </div>
+        <input id="chat-message-submit" type="button" value="Send">
+    </div>
+
+    <script>
+        // ===== User Log ==============================================================
+        const userLogElement = document.getElementById("user-log");
+        userLogElement.value = "";
+
+        const userLogSocket = new WebSocket("ws://127.0.0.1:8000/ws/user_log/");
+        userLogSocket.onmessage = (e) => {
+            userLogElement.value += (e.data + "\n");
+            userLogElement.scrollTop = userLogElement.scrollHeight;
+        };
+
+        // ===== Chat ==================================================================
+        const chatElement = document.getElementById("chat");
+        chatElement.value = "";
+        const chatMessageInputElement = document.getElementById("chat-message-input");
+        chatMessageInputElement.value = "";
+        const chatMessageSubmitButtonElement = document.getElementById("chat-message-submit");
+
+        const chatSocket = new WebSocket("ws://127.0.0.1:8000/ws/chat/");
+        chatSocket.onmessage = (e) => {
+            chatElement.value += (e.data + "\n");
+            chatElement.scrollTop = chatElement.scrollHeight;
+        };
+
+        chatMessageSubmitButtonElement.addEventListener("click", () => {
+            chatSocket.send(chatMessageInputElement.value);
+            chatMessageInputElement.value = "";
+        });
+    </script>
+
+  </body>
+</html>
