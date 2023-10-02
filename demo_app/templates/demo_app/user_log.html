@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>User Log</title>
+  </head>
+  <body>
+
+    <h1>User Log</h1>
+    <textarea id="user-log" cols="100" rows="20" readonly></textarea>
+
+    <script>
+        const userLogElement = document.getElementById("user-log");
+        userLogElement.value = "";
+
+        const chatSocket = new WebSocket("ws://127.0.0.1:8000/ws/user_log/");
+        chatSocket.onmessage = (e) => {
+            userLogElement.value += (e.data + "\n");
+        };
+    </script>
+  </body>
+</html>
